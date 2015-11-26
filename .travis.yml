@@ -77,6 +77,6 @@ script:
   # @todo put the other stuff here to build but this should give us a site
   - cd /var/www/drupal/sites/all/modules
   # RRS
-  phantomjs login.js "http://127.0.0.1/"
+  # phantomjs login.js "http://127.0.0.1/"
 after_script:
   - drush status
