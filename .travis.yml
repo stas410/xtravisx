@@ -2,10 +2,7 @@ language: php
  
 php:
   - 5.3
-  - 5.4
-  - 5.5
-  - hhvm
- 
+
 matrix:
   allow-failures:
     - php: hhvm
@@ -77,6 +74,6 @@ script:
   # @todo put the other stuff here to build but this should give us a site
   - cd /var/www/drupal/sites/all/modules
   # RRS
-  # phantomjs login.js "http://127.0.0.1/"
+  - phpunit loginok
 after_script:
   - drush status
