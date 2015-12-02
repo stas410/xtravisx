@@ -5,7 +5,7 @@ php:
   - 5.4
   - 5.5
   - hhvm
-
+ 
 matrix:
   allow-failures:
     - php: hhvm
@@ -63,20 +63,12 @@ before_script:
   # get some plugins good for testing and building systems rapidly
   - drush dl drush_recipes, registry_rebuild, drush_ecl --y
   - drush cc drush
-  # RRS initialize xvfb for selenium
-  - "sh -e /etc/init.d/xvfb start"
-  - "export DISPLAY=:99.0"
-  - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar"
-  - "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"
-  - sleep 5
  
 script:
   # stand up drupal
   - cd /var/www/drupal
-  - drush site-install -y --db-url=mysql://root@127.0.0.1/travisdb --db-su='root' --db-su-pw='' --account-name=admin --account-pass=admin
+  - drush site-install -y --db-url=mysql://root@127.0.0.1/travisdb --db-su='root' --db-su-pw=''
   # @todo put the other stuff here to build but this should give us a site
   - cd /var/www/drupal/sites/all/modules
-  # RRS
-  - phpunit loginok
 after_script:
   - drush status
