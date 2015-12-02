@@ -34,7 +34,7 @@ before_install:
   - BUILD_TOP=`dirname $TRAVIS_BUILD_DIR`
   - EXIT_VALUE=0
   - sudo apt-get update > /dev/null
-  - composer self-update
+#  - composer self-update
   # mail requirements
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
