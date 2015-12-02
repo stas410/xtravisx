@@ -47,6 +47,12 @@ install:
   # see: https://github.com/drush-ops/drush#install---composer
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 before_script:
+  # RRS initialize xvfb for selenium
+  - "sh -e /etc/init.d/xvfb start"
+  - "export DISPLAY=:99.0"
+  - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar"
+  - "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"
+  - sleep 5
   # setup fake mailserver
   - sudo service postfix stop
   - smtp-sink -d "%d.%H.%M.%S" 127.0.0.1:2500 1000 &
@@ -67,8 +73,10 @@ before_script:
 script:
   # stand up drupal
   - cd /var/www/drupal
-  - drush site-install -y --db-url=mysql://root@127.0.0.1/travisdb --db-su='root' --db-su-pw=''
+  - drush site-install -y --db-url=mysql://root@127.0.0.1/travisdb --db-su='root' --db-su-pw='' --account-name=admin --account-pass=admin
   # @todo put the other stuff here to build but this should give us a site
   - cd /var/www/drupal/sites/all/modules
+  # RRS
+  # phantomjs login.js "http://127.0.0.1/"
 after_script:
   - drush status
