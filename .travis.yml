@@ -72,7 +72,7 @@ before_script:
 script:
   # stand up drupal
   
-  - phpunit --configuration /home/travis/build/raresmr/xtravisx/phpunit.xml 
+  #- phpunit --configuration /home/travis/build/raresmr/xtravisx/phpunit.xml 
   - cd /var/www/drupal
   - drush site-install -y --db-url=mysql://root@127.0.0.1/travisdb --db-su='root' --db-su-pw='' --account-name=admin --account-pass=admin
   # @todo put the other stuff here to build but this should give us a site
@@ -80,7 +80,7 @@ script:
   - pwd
   # RRS
   - cd /home/travis/build/raresmr/xtravisx	
-#  - phpunit --configuration phpunit.xml
+  - phpunit --configuration phpunit.xml
 
 after_script:
   - drush status
