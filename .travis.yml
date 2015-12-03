@@ -29,6 +29,7 @@ mysql:
 before_install:
   - pwd
   - ls
+  - touch xvfblog
   - export UPDATE TRAVIS_BUILD_DIR
   - BUILD_TOP=`dirname $TRAVIS_BUILD_DIR`
   - EXIT_VALUE=0
@@ -52,7 +53,7 @@ before_script:
   - sleep 5
   - "export DISPLAY=:99.0"
   - "wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar"
-  - "DISPLAY=:1 xvfb-run java -jar selenium-server-standalone-2.48.2.jar > /dev/null &"
+  - "xvfb-run java -jar selenium-server-standalone-2.48.2.jar > /home/travis/build/raresmr/xtravisx/xvfblog"
   - sleep 5
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   #RRS add composer in order to install seleneium
@@ -90,3 +91,4 @@ script:
 
 after_script:
   - drush status
+  - cat /home/travis/build/raresmr/xtravisx/xvfblog
