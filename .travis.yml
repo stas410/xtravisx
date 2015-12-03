@@ -76,8 +76,8 @@ script:
   - cd /var/www/drupal/sites/all/modules
   - pwd
   # RRS
-  - cd ~	
-  - phpunit
-  # phantomjs login.js "http://127.0.0.1/"
+  - cd /home/travis/build/raresmr/xtravisx	
+  - phpunit --configuration phpunit.xml
+
 after_script:
   - drush status
