@@ -52,6 +52,10 @@ before_script:
   - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar"
   - "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"
   - sleep 5
+  #RRS add composer in order to install seleneium
+  - curl -s http://getcomposer.org/installer | php
+  - php composer.phar install
+  - ls
   # setup fake mailserver
   - sudo service postfix stop
   - smtp-sink -d "%d.%H.%M.%S" 127.0.0.1:2500 1000 &

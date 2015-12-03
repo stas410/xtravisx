@@ -1,5 +1,9 @@
 <?php
-require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
+
+require_once 'vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumTestCase.php';
+require_once 'vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumTestSuite.php';
+require_once 'vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumTestCase/Driver.php';
+
 class loginok extends PHPUnit_Extensions_SeleniumTestCase
 {
   protected function setUp()
