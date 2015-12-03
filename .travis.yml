@@ -53,9 +53,10 @@ before_script:
   - sleep 5
   - "export DISPLAY=:99.0"
   - "wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar"
-  - "xvfb-run java -jar selenium-server-standalone-2.48.2.jar > /home/travis/build/raresmr/xtravisx/xvfblog"
+  - "java -jar selenium-server-standalone-2.48.2.jar > /home/travis/build/raresmr/xtravisx/xvfblog"
   - sleep 5
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
+  - netstat -ntpl
   #RRS add composer in order to install seleneium
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
