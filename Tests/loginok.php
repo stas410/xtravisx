@@ -15,8 +15,8 @@ class loginok extends PHPUnit_Extensions_SeleniumTestCase
   public function testloginok()
   {
     $this->open("/");
-    $this->type("id=edit-name", "MasterAdmin");
-    $this->type("id=edit-pass", "12345678ra");
+    $this->type("id=edit-name", "admin");
+    $this->type("id=edit-pass", "admin");
     $this->selectWindow("null");
     $this->click("id=edit-submit");
     $this->waitForPageToLoad("30000");
