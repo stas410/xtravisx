@@ -29,7 +29,7 @@ mysql:
 before_install:
   - pwd
   - ls
-  - touch xvfblog
+  - netstat -ntpl
   - export UPDATE TRAVIS_BUILD_DIR
   - BUILD_TOP=`dirname $TRAVIS_BUILD_DIR`
   - EXIT_VALUE=0
@@ -48,12 +48,13 @@ install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 before_script:
   # RRS initialize xvfb for selenium
+  - netstat -ntpl
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 5
   - "export DISPLAY=:99.0"
   - "wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar"
-  - "java -jar selenium-server-standalone-2.48.2.jar > /home/travis/build/raresmr/xtravisx/xvfblog"
+  - "java -jar selenium-server-standalone-2.48.2.jar > /dev/null &"
   - sleep 5
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   - netstat -ntpl
@@ -92,4 +93,3 @@ script:
 
 after_script:
   - drush status
-  - cat /home/travis/build/raresmr/xtravisx/xvfblog
