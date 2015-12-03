@@ -47,13 +47,14 @@ install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 before_script:
   # RRS initialize xvfb for selenium
-  - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free"
-  - "sh -e /etc/init.d/xvfb start"
+  - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
   - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar"
-  - "java -jar selenium-server-standalone-2.31.0.jar"
+  - "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"
   - sleep 5
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
+  - ./checkselenium.sh
   #RRS add composer in order to install seleneium
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
