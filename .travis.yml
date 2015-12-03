@@ -50,8 +50,8 @@ before_script:
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   - "sh -e /etc/init.d/xvfb start"
   - "export DISPLAY=:99.0"
-  - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar"
-  - "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"
+  - "wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar"
+  - "DISPLAY=:1 xvfb-run java -jar selenium-server-standalone-2.48.2.jar > /dev/null &"
   - sleep 5
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   #RRS add composer in order to install seleneium
