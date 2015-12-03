@@ -80,7 +80,7 @@ script:
   - pwd
   # RRS
   - cd /home/travis/build/raresmr/xtravisx	
-  - phpunit --configuration phpunit.xml
+  - phpunit --configuration phpunit.xml --verbose --coverage-text
 
 after_script:
   - drush status
