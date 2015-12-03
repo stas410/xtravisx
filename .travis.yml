@@ -49,6 +49,7 @@ before_script:
   # RRS initialize xvfb for selenium
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   - "sh -e /etc/init.d/xvfb start"
+  - sleep 5
   - "export DISPLAY=:99.0"
   - "wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar"
   - "DISPLAY=:1 xvfb-run java -jar selenium-server-standalone-2.48.2.jar > /dev/null &"
@@ -85,7 +86,7 @@ script:
   # RRS
   - cd /home/travis/build/raresmr/xtravisx	
   #- phpunit --configuration phpunit.xml --verbose --coverage-text
-  - phpunit ./Tests/loginok.php
+  - phpunit ./Tests/loginok.php --verbose --debug
 
 after_script:
   - drush status
