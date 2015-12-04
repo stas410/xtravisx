@@ -59,6 +59,7 @@ before_script:
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
   - netstat -ntpl
   - curl http://localhost:4444/wd/hub/status
+  - ps -ef | grep -i Xvfb
   #RRS add composer in order to install seleneium
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
@@ -87,7 +88,6 @@ script:
   # @todo put the other stuff here to build but this should give us a site
   - cd /var/www/drupal/sites/all/modules
   - pwd
-  - curl http://localhost:4444/wd/hub/status
   # RRS
   - cd /home/travis/build/raresmr/xtravisx	
   #- phpunit --configuration phpunit.xml --verbose --coverage-text
@@ -95,3 +95,4 @@ script:
 
 after_script:
   - drush status
+  - curl 127.0.0.1 | grep front 
