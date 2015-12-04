@@ -57,6 +57,7 @@ before_script:
   - "java -jar selenium-server-standalone-2.48.2.jar > /dev/null &"
   - sleep 10
   - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
+  - sudo drush --root=/var/www/drupal runserver --server=builtin 80 &
   - netstat -ntpl
   - curl http://localhost:4444/wd/hub/status
   - ps -ef | grep -i Xvfb
