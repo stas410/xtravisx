@@ -104,7 +104,7 @@ script:
   # RRS
   - cd /home/travis/build/raresmr/xtravisx	
   #- phpunit --configuration phpunit.xml --verbose --coverage-text
-  - phpunit --configuration phpunit.xml --verbose --debug
+  - phpunit ./Tests/* --verbose --debug
 
 after_script:
   - drush status
