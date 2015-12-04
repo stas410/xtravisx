@@ -9,7 +9,7 @@
 
     <testsuites>
         <testsuite name="Hello World Test Suite">
-            <directory>./Tests/</directory>
+            <directory suffix =".php">./Tests/</directory>
         </testsuite>
     </testsuites>
 
