@@ -1,100 +1,55 @@
 language: php
- 
-php:
-  - 5.6
- 
-matrix:
-  allow-failures:
-    - php: hhvm
- 
-  env:
-    global:
-      - ES_VER=1.0.1
-      - ES_MAPPER_ATTACHMENTS_VER=2.0.0.RC1
-      - ES_TRANSPORT_THRIFT_VER=2.0.0.RC1
-      - ES_GEOCLUSTER_FACET_VER=0.0.10
-      - ES_WAIT_ON_MAPPING_CHANGE=true
-      - DATABASE='drupal'
-      - DB_USERNAME='root'
-      - DB_ENCODE='utf8'
-    matrix:
-      - DRUPAL_3RD_PARTY='composer_manager'
-      - DRUPAL_3RD_PARTY='libraries'
- 
-mysql:
-  database: $DATABASE
-  username: $DB_USERNAME
-  encoding: $DB_ENCODE
- 
-before_install:
-  - pwd
-  - ls
-  - netstat -ntpl
-  - export UPDATE TRAVIS_BUILD_DIR
-  - BUILD_TOP=`dirname $TRAVIS_BUILD_DIR`
-  - EXIT_VALUE=0
-  - sudo apt-get update > /dev/null
-  - composer self-update
-  # mail requirements
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq postfix
-install:
-  # install php packages required for running a web server from drush on php 5.3
-  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
-  # install drush globally
-  - composer global require drush/drush:6.* --prefer-source
-  # add composer's global bin directory to the path
-  # see: https://github.com/drush-ops/drush#install---composer
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-before_script:
-  # RRS initialize xvfb for selenium
-  - netstat -ntpl
-  - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 5
-  - "export DISPLAY=:99.0"
-  - "wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar"
-  - "java -jar selenium-server-standalone-2.48.2.jar > /dev/null &"
-  - sleep 10
-  - xdpyinfo -display :0 >/dev/null 2>&1 && echo "In use" || echo "Free 2"
-  - netstat -ntpl
-  - curl http://localhost:4444/wd/hub/status
-  - ps -ef | grep -i Xvfb
-  #RRS add composer in order to install seleneium
-  - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install
-  - ls
-  # setup fake mailserver
-  - sudo service postfix stop
-  - smtp-sink -d "%d.%H.%M.%S" 127.0.0.1:2500 1000 &
-  - echo -e '#!/usr/bin/env bash\nexit 0' | sudo tee /usr/sbin/sendmail
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee "/home/travis/.phpenv/versions/`php -i | grep "PHP Version" | head -n 1 | grep -o -P '\d+\.\d+\.\d+.*'`/etc/conf.d/sendmail.ini"
-  # establish drupal package put in place the right way
-  - sudo mkdir -p /var/www
-  - sudo chown travis:travis /var/www
-  - drush dl drupal --destination=/var/www --default-major=7 --drupal-project-rename=drupal --y
-  # get drush recipes setup functions
-  - sudo mkdir -p ~/.drush
-  - sudo chown -R travis:travis ~/.drush
-  - cd ~/.drush/
-  # get some plugins good for testing and building systems rapidly
-  - drush dl drush_recipes, registry_rebuild, drush_ecl --y
-  - drush cc drush
-  - sudo apt-get install drush
- 
-script:
-  # stand up drupal
-  - cd /var/www/drupal
-  - drush site-install -y --db-url=mysql://root@127.0.0.1/travisdb --db-su='root' --db-su-pw='' --account-name=admin --account-pass=admin
-  - sudo drush --root=/var/www/drupal runserver --server=builtin 80 &
-  # @todo put the other stuff here to build but this should give us a site
-  - cd /var/www/drupal/sites/all/modules
-  - pwd
-  # RRS
-  - cd /home/travis/build/raresmr/xtravisx	
-  #- phpunit --configuration phpunit.xml --verbose --coverage-text
-  - phpunit ./Tests/loginok.php --verbose --debug
 
-after_script:
-  - drush status
-  - curl 127.0.0.1 | grep front 
+php:
+  - 5.4
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+install:
+
+  # Create MySQL Database
+  - mysql -e 'create database drupal;'
+
+  # Install Drush
+  - pear channel-discover pear.drush.org
+  - pear install drush/drush-5.4.0
+  - phpenv rehash
+
+  # Run composer
+  - cd ./tests/behat
+  - composer install
+  - cd ../../
+
+before_script:
+
+  # Install Classic Profile
+  - cd ../
+  - mkdir profiles
+  - mv classic profiles/
+  - mkdir drupal
+  - mv profiles drupal/
+  - cd drupal
+  - drush make --prepare-install profiles/classic/build-classic.make --yes
+  - sudo chmod -R 777 sites/all/modules
+  - drush si classic --sites-subdir=default --db-url=mysql://root:@127.0.0.1/drupal --account-name=admin --account-pass=classic --site-mail=admin@example.com --site-name="Drupal Classic Profile" --yes
+  - drush cc all --yes
+  - cd ../
+
+  # Setup display for selenium
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 5
+  - sudo drush --root=$PWD/drupal runserver --server=builtin 80 &
+  - netstat -ntpl
+  - sleep 5
+  - wget http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar
+  - java -jar selenium-server-standalone-2.48.2.jar > /dev/null &"
+#  - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
+#  - java -jar selenium-server-standalone-2.25.0.jar -p 4444 &
+  - sleep 5
+
+script:
+  - phpunit ./Tests/loginok.php --verbose --debug
