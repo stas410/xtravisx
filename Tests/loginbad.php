@@ -13,14 +13,17 @@ class loginbad extends PHPUnit_Extensions_SeleniumTestCase
   }
 
   public function testlogibad()
-  {
+{
     $this->open("/");
-    $this->type("id=edit-name", "adminx");
-    $this->type("id=edit-pass", "admin");
-    $this->selectWindow("null");
+    $this->type("id=edit-name", "MasterAdmin");
+    $this->type("id=edit-pass", "12345678x");
     $this->click("id=edit-submit");
     $this->waitForPageToLoad("30000");
-    $this->assertTrue($this->isElementPresent("link=Log out"));
+    try {
+        $this->assertTrue((bool)preg_match('/^exact:Error message Sorry, unrecognized username or password\. Have you forgotten your password[\s\S]$/',$this->getText("css=div.messages.error")));
+    } catch (PHPUnit_Framework_AssertionFailedError $e) {
+        array_push($this->verificationErrors, $e->toString());
+    }
   }
 }
 ?>
