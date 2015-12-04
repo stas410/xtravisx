@@ -81,12 +81,12 @@ before_script:
   - drush dl drush_recipes, registry_rebuild, drush_ecl --y
   - drush cc drush
   - sudo apt-get install drush
-  - sudo drush --root=/var/www/drupal runserver --server=builtin 80 &
  
 script:
   # stand up drupal
   - cd /var/www/drupal
   - drush site-install -y --db-url=mysql://root@127.0.0.1/travisdb --db-su='root' --db-su-pw='' --account-name=admin --account-pass=admin
+  - sudo drush --root=/var/www/drupal runserver --server=builtin 80 &
   # @todo put the other stuff here to build but this should give us a site
   - cd /var/www/drupal/sites/all/modules
   - pwd
