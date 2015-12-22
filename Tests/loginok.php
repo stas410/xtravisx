@@ -23,4 +23,5 @@ class loginok extends PHPUnit_Extensions_SeleniumTestCase
     $this->assertTrue($this->isElementPresent("link=Log out"));
   }
 }
+
 ?>
